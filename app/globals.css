@@ -1,31 +1,1241 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
+/* Force mobile layout for ReactionBar inside mobile preview */
+/* Override Tailwind's sm: breakpoint when inside mobile preview */
+.mobile-preview .bg-gray-50.rounded-2xl > div[class*="flex"] {
+  flex-direction: column !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #050505;
-    --foreground: #fafafa;
-    --primary: #3b82f6;
+.mobile-preview .bg-gray-50.rounded-2xl button[class*="w-full"] {
+  width: 100% !important;
+  flex: none !important;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
   }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.animate-shimmer {
+  animation: shimmer 2s infinite;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+/* TipTap Editor Styles */
+.ProseMirror {
+  min-height: 400px;
+  padding: 1rem;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.ProseMirror h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.ProseMirror h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+
+.ProseMirror p {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+}
+
+.ProseMirror strong {
+  font-weight: 700;
+}
+
+.ProseMirror em {
+  font-style: italic;
+}
+
+.ProseMirror u {
+  text-decoration: underline;
+}
+
+.ProseMirror s {
+  text-decoration: line-through;
+}
+
+.ProseMirror mark {
+  background-color: #fef08a;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.ProseMirror ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror li {
+  margin-bottom: 0.125rem;
+  line-height: 1.5;
+}
+
+/* Centered lists - center the list block while keeping bullets inline with text */
+.ProseMirror ul[style*="text-align: center"],
+.ProseMirror ol[style*="text-align: center"],
+.preview-content ul[style*="text-align: center"],
+.preview-content ol[style*="text-align: center"],
+.prose ul[style*="text-align: center"],
+.prose ol[style*="text-align: center"] {
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  padding-left: 1.5rem;
+  width: calc(100% - 3rem) !important;
+  max-width: calc(100% - 3rem) !important;
+  table-layout: fixed !important;
+  box-sizing: border-box !important;
+}
+
+.ProseMirror ul[style*="text-align: center"] li,
+.ProseMirror ol[style*="text-align: center"] li,
+.preview-content ul[style*="text-align: center"] li,
+.preview-content ol[style*="text-align: center"] li,
+.prose ul[style*="text-align: center"] li,
+.prose ol[style*="text-align: center"] li {
+  text-align: left;
+}
+
+.ProseMirror ul[style*="text-align: center"] li p,
+.ProseMirror ol[style*="text-align: center"] li p,
+.preview-content ul[style*="text-align: center"] li p,
+.preview-content ol[style*="text-align: center"] li p,
+.prose ul[style*="text-align: center"] li p,
+.prose ol[style*="text-align: center"] li p {
+  text-align: left;
+}
+
+.ProseMirror ul[style*="text-align: right"],
+.ProseMirror ol[style*="text-align: right"],
+.preview-content ul[style*="text-align: right"],
+.preview-content ol[style*="text-align: right"],
+.prose ul[style*="text-align: right"],
+.prose ol[style*="text-align: right"] {
+  display: table;
+  margin-left: auto;
+  margin-right: 0;
+  text-align: left;
+  padding-left: 1.5rem;
+  max-width: 100%;
+}
+
+.ProseMirror ul[style*="text-align: right"] li,
+.ProseMirror ol[style*="text-align: right"] li,
+.preview-content ul[style*="text-align: right"] li,
+.preview-content ol[style*="text-align: right"] li,
+.prose ul[style*="text-align: right"] li,
+.prose ol[style*="text-align: right"] li {
+  text-align: left;
+}
+
+.ProseMirror ul[style*="text-align: right"] li p,
+.ProseMirror ol[style*="text-align: right"] li p,
+.preview-content ul[style*="text-align: right"] li p,
+.preview-content ol[style*="text-align: right"] li p,
+.prose ul[style*="text-align: right"] li p,
+.prose ol[style*="text-align: right"] li p {
+  text-align: left;
+}
+
+/* Ensure text alignment works with prose */
+.ProseMirror [style*="text-align: left"] {
+  text-align: left !important;
+}
+
+.ProseMirror [style*="text-align: center"] {
+  text-align: center !important;
+}
+
+.ProseMirror [style*="text-align: right"] {
+  text-align: right !important;
+}
+
+.ProseMirror [style*="text-align: justify"] {
+  text-align: justify !important;
+}
+
+.ProseMirror p {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+/* Image attribution caption (editor + preview) */
+.ProseMirror figure[data-type="image"],
+.preview-content figure[data-type="image"] {
+  margin: 1rem 0;
+}
+
+.ProseMirror figure[data-type="image"] figcaption.image-caption,
+.preview-content figure[data-type="image"] figcaption.image-caption,
+.ProseMirror .image-caption,
+.preview-content .image-caption {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: rgb(107 114 128);
+}
+
+.ProseMirror figure[data-type="image"] figcaption.image-caption a,
+.preview-content figure[data-type="image"] figcaption.image-caption a,
+.ProseMirror .image-caption a,
+.preview-content .image-caption a {
+  color: rgb(37 99 235);
+  text-decoration: underline;
+}
+
+.ProseMirror .image-license,
+.preview-content .image-license {
+  color: rgb(107 114 128);
+}
+
+/* Image source link - clickable in preview, not in editor */
+.ProseMirror .image-source-link {
+  pointer-events: none;
+  /* Prevent clicking in editor - clicking should select the image */
+  cursor: default;
+  display: inline-block;
+}
+
+.preview-content .image-source-link {
+  pointer-events: auto;
+  /* Allow clicking in preview */
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  transition: opacity 0.2s;
+  border: none;
+  outline: none;
+}
+
+.preview-content .image-source-link:hover {
+  opacity: 0.9;
+}
+
+.preview-content .image-source-link:focus {
+  outline: 2px solid rgb(37 99 235);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+.preview-content .image-source-link img {
+  display: block;
+  margin: 0;
+  /* Remove default margin since anchor handles spacing */
+}
+
+/* Image alignment in preview for figure-wrapped images */
+.preview-content figure[data-type="image"] {
+  display: block;
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+.preview-content figure[data-type="image"][data-align="left"] {
+  text-align: left;
+}
+
+.preview-content figure[data-type="image"][data-align="left"] img,
+.preview-content
+  figure[data-type="image"][data-align="left"]
+  .image-source-link {
+  display: inline-block;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.preview-content figure[data-type="image"][data-align="center"] {
+  text-align: center;
+}
+
+.preview-content figure[data-type="image"][data-align="center"] img,
+.preview-content
+  figure[data-type="image"][data-align="center"]
+  .image-source-link {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.preview-content figure[data-type="image"][data-align="right"] {
+  text-align: right;
+}
+
+.preview-content figure[data-type="image"][data-align="right"] img,
+.preview-content
+  figure[data-type="image"][data-align="right"]
+  .image-source-link {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* Quiz styles */
+.ProseMirror .quiz-wrapper,
+.preview-content .quiz-wrapper {
+  display: block;
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+.ProseMirror .quiz-wrapper[data-align="left"],
+.preview-content .quiz-wrapper[data-align="left"] {
+  text-align: left;
+}
+
+.ProseMirror .quiz-wrapper[data-align="left"] .quiz-inner,
+.preview-content .quiz-wrapper[data-align="left"] .quiz-inner {
+  display: inline-block;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.ProseMirror .quiz-wrapper[data-align="center"],
+.preview-content .quiz-wrapper[data-align="center"] {
+  text-align: center;
+}
+
+.ProseMirror .quiz-wrapper[data-align="center"] .quiz-inner,
+.preview-content .quiz-wrapper[data-align="center"] .quiz-inner {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ProseMirror .quiz-wrapper[data-align="right"],
+.preview-content .quiz-wrapper[data-align="right"] {
+  text-align: right;
+}
+
+.ProseMirror .quiz-wrapper[data-align="right"] .quiz-inner,
+.preview-content .quiz-wrapper[data-align="right"] .quiz-inner {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.ProseMirror .quiz-inner,
+.preview-content .quiz-inner {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  width: 100%;
+}
+
+.ProseMirror-selectednode .quiz-wrapper {
+  outline: 2px solid rgb(37 99 235);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Video styles */
+.ProseMirror .video-wrapper,
+.preview-content .video-wrapper {
+  display: block;
+  width: 80%;
+  max-width: 760px;
+  aspect-ratio: 16 / 9;
+  margin: 1.5rem auto;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ProseMirror .video-wrapper[data-align="left"],
+.preview-content .video-wrapper[data-align="left"] {
+  text-align: left;
+}
+
+.ProseMirror .video-wrapper[data-align="left"] .video-inner,
+.preview-content .video-wrapper[data-align="left"] .video-inner {
+  display: inline-block;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.ProseMirror .video-wrapper[data-align="center"],
+.preview-content .video-wrapper[data-align="center"] {
+  text-align: center;
+}
+
+.ProseMirror .video-wrapper[data-align="center"] .video-inner,
+.preview-content .video-wrapper[data-align="center"] .video-inner {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ProseMirror .video-wrapper[data-align="right"],
+.preview-content .video-wrapper[data-align="right"] {
+  text-align: right;
+}
+
+.ProseMirror .video-wrapper[data-align="right"] .video-inner,
+.preview-content .video-wrapper[data-align="right"] .video-inner {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.ProseMirror .video-inner,
+.preview-content .video-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  line-height: 0;
+}
+
+.ProseMirror .video-wrapper iframe,
+.ProseMirror .video-wrapper video,
+.ProseMirror .video-wrapper .video-js,
+.preview-content .video-wrapper iframe,
+.preview-content .video-wrapper video,
+.preview-content .video-wrapper .video-js {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+/* Video selection border */
+.ProseMirror-selectednode .video-wrapper {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Prevent video playback in editor mode */
+.ProseMirror .video-wrapper iframe,
+.ProseMirror .video-wrapper video {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Re-enable video controls in preview mode */
+.preview-content .video-wrapper iframe,
+.preview-content .video-wrapper video {
+  pointer-events: auto;
+  user-select: auto;
+}
+
+/* Ensure text alignment works with prose */
+.ProseMirror [style*="text-align: left"],
+.preview-content [style*="text-align: left"] {
+  text-align: left !important;
+}
+
+.ProseMirror [style*="text-align: center"],
+.preview-content [style*="text-align: center"] {
+  text-align: center !important;
+}
+
+.ProseMirror [style*="text-align: right"],
+.preview-content [style*="text-align: right"] {
+  text-align: right !important;
+}
+
+.ProseMirror [style*="text-align: justify"],
+.preview-content [style*="text-align: justify"] {
+  text-align: justify !important;
+}
+
+/* Line spacing classes */
+.ProseMirror [style*="line-height"] {
+  line-height: inherit;
+}
+
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror ul[data-type="taskList"] li > label {
+  flex: 0 0 auto;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+.ProseMirror ul[data-type="taskList"] li > div {
+  flex: 1 1 auto;
+}
+
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"] {
+  cursor: pointer;
+  margin-top: 0.25rem;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror ul[data-type="taskList"] li > label {
+  flex: 0 0 auto;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+.ProseMirror ul[data-type="taskList"] li > div {
+  flex: 1 1 auto;
+}
+
+.ProseMirror ul[data-type="taskList"] input[type="checkbox"] {
+  cursor: pointer;
+  margin-top: 0.25rem;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid rgb(209 213 219);
+  padding-left: 1rem;
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+.ProseMirror code {
+  background-color: rgb(243 244 246);
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: monospace;
+}
+
+.ProseMirror pre {
+  background-color: rgb(243 244 246);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.ProseMirror pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.ProseMirror a {
+  color: rgb(37 99 235);
+  text-decoration: underline;
+}
+
+.ProseMirror a:hover {
+  color: rgb(29 78 216);
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+}
+
+/* Image wrapper for resize functionality */
+.ProseMirror .image-wrapper {
+  display: block;
+  position: relative;
+  margin: 1rem 0;
+  width: 100%;
+}
+
+/* Inner container shrink-wraps to the image so resize handle anchors correctly */
+.ProseMirror .image-inner {
+  display: inline-block;
+  position: relative;
+  max-width: 100%;
+  line-height: 0;
+}
+
+.ProseMirror .image-inner img {
+  display: block;
+  max-width: 100%;
+  transition: outline 0.2s;
+}
+
+/* Active selection border */
+.ProseMirror .image-wrapper.ProseMirror-selectednode img {
+  outline: 3px solid #3b82f6;
+  outline-offset: -3px;
+}
+
+/* Resize handle */
+.ProseMirror .resize-handle,
+.ProseMirror .video-inner .resize-handle {
+  position: absolute;
+  bottom: 16px;
+  right: 0px;
+  width: 8px;
+  height: 8px;
+  background-color: #3b82f6;
+  cursor: se-resize;
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: 2px;
+  z-index: 10;
+  box-shadow: 0 0 0 2px white;
+}
+
+.ProseMirror .image-inner:hover .resize-handle,
+.ProseMirror .video-inner:hover .resize-handle {
+  opacity: 1;
+}
+
+.ProseMirror .resize-handle:hover {
+  background-color: #2563eb;
+}
+
+/* Video resize handle - always visible and larger than image handle */
+.ProseMirror .video-resize-handle {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  background-color: #3b82f6;
+  border: 2px solid white;
+  border-radius: 2px;
+  cursor: nwse-resize;
+  z-index: 30;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+  opacity: 1;
+  touch-action: none;
+}
+
+.ProseMirror .video-resize-handle:hover {
+  background-color: #2563eb;
+}
+
+/* Slider styles for video resize */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Image alignment */
+.ProseMirror .image-wrapper[data-align="left"] {
+  text-align: left;
+}
+
+.ProseMirror .image-wrapper[data-align="center"] {
+  text-align: center;
+}
+
+.ProseMirror .image-wrapper[data-align="right"] {
+  text-align: right;
+}
+
+.ProseMirror hr {
+  margin: 2rem 0;
+  border-color: rgb(209 213 219);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  padding: 0.5rem 0;
+  background: transparent;
+  border-style: none none solid none;
+  border-width: 0 0 1px 0;
+}
+
+.ProseMirror hr:hover {
+  border-color: rgb(156 163 175);
+  background: rgb(243 244 246 / 0.5);
+}
+
+.ProseMirror hr.ProseMirror-selectednode {
+  border-color: rgb(99 102 241);
+  background: rgb(99 102 241 / 0.1);
+  outline: none;
+}
+
+/* Table Styles */
+.ProseMirror table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  table-layout: fixed;
+  width: 100%;
+  overflow: hidden;
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+  min-width: 1em;
+  border: 1px solid rgb(209 213 219);
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+  cursor: text;
+}
+
+.ProseMirror table th {
+  font-weight: 600;
+  text-align: left;
+  background-color: rgb(249 250 251);
+}
+
+.ProseMirror table .selectedCell:after {
+  z-index: 1;
+  position: absolute;
+  content: "";
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(200, 200, 255, 0.4);
+  pointer-events: none;
+}
+
+/* Ensure cursor is visible in table cells */
+.ProseMirror table td p,
+.ProseMirror table th p {
+  cursor: text;
+  position: relative;
+  z-index: 2;
+}
+
+.ProseMirror table .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -2px;
+  width: 4px;
+  background-color: rgb(59 130 246);
+  pointer-events: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: rgb(156 163 175);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror
+  p[style*="text-align: center"].is-editor-empty:first-child::before {
+  float: none;
+  width: 100%;
+  text-align: center;
+}
+
+.ProseMirror p[style*="text-align: right"].is-editor-empty:first-child::before {
+  float: right;
+  text-align: right;
+}
+
+/* Preview Content Styles */
+.preview-content h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.preview-content h1,
+.preview-content h2,
+.preview-content h3,
+.preview-content h4,
+.preview-content h5,
+.preview-content h6 {
+  font-family: var(--heading-font, inherit);
+  font-weight: var(--heading-weight, 700);
+  color: var(--heading-color, inherit);
+}
+
+.preview-content h2 {
+  font-size: 1.875rem;
+  margin-bottom: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.preview-content h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+
+.preview-content p {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+}
+
+.preview-content strong {
+  font-weight: 700;
+}
+
+.preview-content em {
+  font-style: italic;
+}
+
+/* Ensure proper margins on prose lists (public pages) */
+.prose ul:not([style*="text-align: center"]),
+.prose ol:not([style*="text-align: center"]) {
+  margin-left: 1.5rem !important;
+  margin-right: 1.5rem !important;
+}
+
+.preview-content ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.preview-content ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Centered lists in preview - center the list block */
+.preview-content ul[style*="text-align: center"],
+.preview-content ol[style*="text-align: center"] {
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  padding-left: 1.5rem;
+}
+
+.preview-content ul[style*="text-align: center"] li,
+.preview-content ol[style*="text-align: center"] li {
+  text-align: left;
+}
+
+.preview-content ul[style*="text-align: right"],
+.preview-content ol[style*="text-align: right"] {
+  display: table;
+  margin-left: auto;
+  margin-right: 0;
+  text-align: left;
+  padding-left: 1.5rem;
+}
+
+.preview-content ul[style*="text-align: right"] li,
+.preview-content ol[style*="text-align: right"] li {
+  text-align: left;
+}
+
+.preview-content blockquote {
+  border-left: 4px solid rgb(209 213 219);
+  padding-left: 1rem;
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+.preview-content code {
+  background-color: rgb(243 244 246);
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-family: monospace;
+}
+
+.preview-content pre {
+  background-color: rgb(243 244 246);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.preview-content pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Table Styles for Preview */
+.preview-content table {
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  width: 100%;
+  overflow-x: auto;
+  display: table;
+}
+
+.preview-content table td,
+.preview-content table th {
+  min-width: 1em;
+  border: 1px solid rgb(209 213 219);
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.preview-content table th {
+  font-weight: 600;
+  text-align: left;
+  background-color: rgb(249 250 251);
+}
+
+/* Responsive table wrapper for mobile */
+@media (max-width: 768px) {
+  .preview-content {
+    overflow-x: auto;
+  }
+
+  .preview-content table {
+    min-width: 100%;
+  }
+}
+
+.preview-content a {
+  color: rgb(37 99 235);
+  text-decoration: underline;
+}
+
+.preview-content a:hover {
+  color: rgb(29 78 216);
+}
+
+.preview-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+}
+
+.preview-content hr {
+  margin: 2rem 0;
+  border-color: rgb(209 213 219);
+}
+
+/* Editorial Template Styles */
+.editorial-editor .ProseMirror {
+  font-family: var(--body-font, Georgia, serif);
+  font-weight: var(--body-weight, 400);
+  color: var(--text-color, #000);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.editorial-editor .ProseMirror *,
+.editorial-editor .ProseMirror p,
+.editorial-editor .ProseMirror span {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.editorial-editor .ProseMirror h1,
+.editorial-editor .ProseMirror h2,
+.editorial-editor .ProseMirror h3 {
+  font-family: var(--heading-font, "PT Serif", Georgia, serif);
+  font-weight: var(--heading-weight, 700);
+}
+
+.editorial-editor .ProseMirror h1 {
+  font-size: 3rem;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.editorial-editor .ProseMirror h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.editorial-editor .ProseMirror blockquote {
+  border-left: 4px solid currentColor;
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+.editorial-editor .ProseMirror a {
+  color: var(--link-color, #4746e5);
+}
+
+.editorial-editor .ProseMirror .editorial-header {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(156 163 175);
+  margin-bottom: 1rem;
+}
+
+.editorial-editor .ProseMirror .subtitle {
+  font-size: 1.25rem;
+  font-style: italic;
+  color: rgb(107 114 128);
+  margin-bottom: 2rem;
+}
+
+.editorial-editor .ProseMirror .byline {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgb(229 231 235);
+  margin-bottom: 3rem;
+}
+
+/* Preview content editorial styles */
+.preview-content.editorial h1 {
+  font-size: 3rem;
+  line-height: 1.2;
+}
+
+.preview-content.editorial blockquote {
+  font-size: 1.5rem;
+  border-left-width: 4px;
+}
+
+/* Soft Reading Time Badge - warm and inviting */
+.editorial-editor .ProseMirror mark[data-color="#dbeafe"],
+.preview-content mark[data-color="#dbeafe"] {
+  background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%) !important;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #92400e;
+  letter-spacing: 0.03em;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+
+/* Decorative thin line */
+.decorative-line-thin {
+  display: inline-block;
+  color: #d1d5db;
+  letter-spacing: -0.1em;
+  font-weight: 300;
+}
+
+/* Purple badge highlight */
+.editorial-editor .ProseMirror mark[data-color="#c7d2fe"],
+.preview-content mark[data-color="#c7d2fe"] {
+  background: linear-gradient(
+    135deg,
+    #a78bfa 0%,
+    #8b5cf6 50%,
+    #7c3aed 100%
+  ) !important;
+  color: white !important;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3),
+    0 0 20px rgba(139, 92, 246, 0.15);
+  border: none;
+}
+
+/* Mobile preview styles */
+.mobile-preview .ProseMirror,
+.mobile-preview .preview-content {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.mobile-preview .ProseMirror h1,
+.mobile-preview .preview-content h1 {
+  font-size: 1.75rem !important;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.mobile-preview .ProseMirror h2,
+.mobile-preview .preview-content h2 {
+  font-size: 1.35rem !important;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-preview .ProseMirror h3,
+.mobile-preview .preview-content h3 {
+  font-size: 1.15rem !important;
+}
+
+.mobile-preview .ProseMirror blockquote,
+.mobile-preview .preview-content blockquote {
+  font-size: 1.1rem !important;
+  padding-left: 1rem;
+  margin: 1rem 0;
+}
+
+.mobile-preview .ProseMirror p,
+.mobile-preview .preview-content p {
+  margin-bottom: 0.75rem;
+}
+
+/* Responsive canvas for actual mobile devices */
+@media (max-width: 640px) {
+  .editorial-editor .ProseMirror h1 {
+    font-size: 2rem;
+  }
+
+  .editorial-editor .ProseMirror blockquote {
+    font-size: 1.25rem;
+  }
+}
+
+/* Template required elements styling */
+.ProseMirror [data-template-required="true"],
+.preview-content [data-template-required="true"] {
+  position: relative;
+}
+
+/* Template element specific styles */
+.ProseMirror [data-template-type="series"],
+.preview-content [data-template-type="series"] {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.ProseMirror [data-template-type="subtitle"],
+.preview-content [data-template-type="subtitle"] {
+  font-size: 1.25rem;
+  font-style: italic;
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+.ProseMirror [data-template-type="byline"],
+.preview-content [data-template-type="byline"] {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1rem;
+  margin-bottom: 3rem;
+}
+
+/* Fix for text overflow in editor and public views, especially for lists in mobile view */
+.ProseMirror,
+.preview-content,
+.prose {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  max-width: 100%;
+  width: 100%;
+}
+
+.ProseMirror li,
+.preview-content li,
+.prose li {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+  /* Ensure content doesn't overflow container */
+  max-width: 100%;
+}
+
+/* Force wrapping on paragraphs inside list items */
+.ProseMirror li p,
+.preview-content li p,
+.prose li p {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+}
+
+/* Force proper width constraints on table-based centered lists */
+.ProseMirror ul[style*="text-align: center"],
+.ProseMirror ol[style*="text-align: center"],
+.preview-content ul[style*="text-align: center"],
+.preview-content ol[style*="text-align: center"],
+.prose ul[style*="text-align: center"],
+.prose ol[style*="text-align: center"] {
+  width: auto !important;
+  max-width: calc(100% - 3rem) !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure mobile preview specific constraints are respected */
+.mobile-preview .ProseMirror,
+.mobile-preview .preview-content {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Override max-w-none for list containers */
+.prose.max-w-none ul,
+.prose.max-w-none ol,
+.ProseMirror ul,
+.ProseMirror ol,
+.preview-content ul,
+.preview-content ol {
+  max-width: 100% !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
 }
