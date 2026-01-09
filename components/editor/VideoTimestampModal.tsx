@@ -228,7 +228,7 @@ export function VideoTimestampModal({
       }
       if (playerRef.current && playerRef.current.removeEventListener) {
         try {
-          playerRef.current.removeEventListener("timeupdate", () => {});
+          playerRef.current.removeEventListener("timeupdate", () => { });
         } catch {
           return;
         }
@@ -347,7 +347,7 @@ export function VideoTimestampModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={onClose}
     >
       <div

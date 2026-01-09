@@ -100,7 +100,7 @@ export function ImageAttributionModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
@@ -159,11 +159,10 @@ export function ImageAttributionModal({
                 <button
                   type="button"
                   onClick={() => setShowAttribution((v) => !v)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium border ${
-                    showAttribution
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium border ${showAttribution
                       ? "bg-black text-white border-black"
                       : "bg-white text-gray-700 border-gray-300"
-                  }`}
+                    }`}
                 >
                   {showAttribution ? "On" : "Off"}
                 </button>

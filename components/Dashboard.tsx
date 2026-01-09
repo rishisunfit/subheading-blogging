@@ -88,10 +88,10 @@ export function Dashboard({
   onDeletePost,
   onPreviewPost,
   onViewAnalytics,
-  onCreateQuiz = () => {},
-  onEditQuiz = () => {},
-  onDeleteQuiz = () => {},
-  onPreviewQuiz = () => {},
+  onCreateQuiz = () => { },
+  onEditQuiz = () => { },
+  onDeleteQuiz = () => { },
+  onPreviewQuiz = () => { },
   posts,
   quizzes = [],
   folders = [],
@@ -495,9 +495,8 @@ export function Dashboard({
 
     const confirmed = await showDialog({
       type: "confirm",
-      message: `Are you sure you want to delete "${folderName}"? This will permanently delete the folder and mark all ${postCount} post${
-        postCount !== 1 ? "s" : ""
-      } in this folder as unfiled. This action cannot be undone.`,
+      message: `Are you sure you want to delete "${folderName}"? This will permanently delete the folder and mark all ${postCount} post${postCount !== 1 ? "s" : ""
+        } in this folder as unfiled. This action cannot be undone.`,
       title: "Delete Folder",
       confirmText: "Delete Folder",
       cancelText: "Cancel",
@@ -523,9 +522,8 @@ export function Dashboard({
 
         await showDialog({
           type: "alert",
-          message: `Folder "${folderName}" has been deleted. ${postCount} post${
-            postCount !== 1 ? "s have" : " has"
-          } been marked as unfiled.`,
+          message: `Folder "${folderName}" has been deleted. ${postCount} post${postCount !== 1 ? "s have" : " has"
+            } been marked as unfiled.`,
           title: "Folder Deleted",
         });
       } catch (error) {
@@ -607,19 +605,15 @@ export function Dashboard({
       const removedCount = postsToRemove.length;
       let message = "";
       if (addedCount > 0 && removedCount > 0) {
-        message = `Successfully added ${addedCount} post${
-          addedCount > 1 ? "s" : ""
-        } and removed ${removedCount} post${
-          removedCount > 1 ? "s" : ""
-        } from folder.`;
+        message = `Successfully added ${addedCount} post${addedCount > 1 ? "s" : ""
+          } and removed ${removedCount} post${removedCount > 1 ? "s" : ""
+          } from folder.`;
       } else if (addedCount > 0) {
-        message = `Successfully added ${addedCount} post${
-          addedCount > 1 ? "s" : ""
-        } to folder.`;
+        message = `Successfully added ${addedCount} post${addedCount > 1 ? "s" : ""
+          } to folder.`;
       } else if (removedCount > 0) {
-        message = `Successfully removed ${removedCount} post${
-          removedCount > 1 ? "s" : ""
-        } from folder.`;
+        message = `Successfully removed ${removedCount} post${removedCount > 1 ? "s" : ""
+          } from folder.`;
       } else {
         message = "Folder updated.";
       }
@@ -738,90 +732,80 @@ export function Dashboard({
         <div className="flex gap-1 mb-6 bg-white rounded-xl p-1.5 shadow-sm border border-gray-200 w-fit">
           <button
             onClick={() => setActiveTab("posts")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
-              activeTab === "posts"
-                ? "bg-black text-white shadow-sm"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${activeTab === "posts"
+              ? "bg-black text-white shadow-sm"
+              : "text-gray-600 hover:bg-gray-100"
+              }`}
           >
             <FileText size={18} />
             Posts
             <span
-              className={`text-xs px-2 py-0.5 rounded-full ${
-                activeTab === "posts" ? "bg-white/20" : "bg-gray-200"
-              }`}
+              className={`text-xs px-2 py-0.5 rounded-full ${activeTab === "posts" ? "bg-white/20" : "bg-gray-200"
+                }`}
             >
               {posts.length}
             </span>
           </button>
           <button
             onClick={() => setActiveTab("quizzes")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
-              activeTab === "quizzes"
-                ? "bg-violet-600 text-white shadow-sm"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${activeTab === "quizzes"
+              ? "bg-violet-600 text-white shadow-sm"
+              : "text-gray-600 hover:bg-gray-100"
+              }`}
           >
             <ClipboardList size={18} />
             Quizzes
             <span
-              className={`text-xs px-2 py-0.5 rounded-full ${
-                activeTab === "quizzes" ? "bg-white/20" : "bg-gray-200"
-              }`}
+              className={`text-xs px-2 py-0.5 rounded-full ${activeTab === "quizzes" ? "bg-white/20" : "bg-gray-200"
+                }`}
             >
               {quizzes.length}
             </span>
           </button>
           <button
             onClick={() => setActiveTab("responses")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
-              activeTab === "responses"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${activeTab === "responses"
+              ? "bg-blue-600 text-white shadow-sm"
+              : "text-gray-600 hover:bg-gray-100"
+              }`}
           >
             <MessageSquare size={18} />
             Responses
             <span
-              className={`text-xs px-2 py-0.5 rounded-full ${
-                activeTab === "responses" ? "bg-white/20" : "bg-gray-200"
-              }`}
+              className={`text-xs px-2 py-0.5 rounded-full ${activeTab === "responses" ? "bg-white/20" : "bg-gray-200"
+                }`}
             >
               {responses.length}
             </span>
           </button>
           <button
             onClick={() => setActiveTab("quiz-responses")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
-              activeTab === "quiz-responses"
-                ? "bg-purple-600 text-white shadow-sm"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${activeTab === "quiz-responses"
+              ? "bg-purple-600 text-white shadow-sm"
+              : "text-gray-600 hover:bg-gray-100"
+              }`}
           >
             <Users size={18} />
             Quiz Responses
             <span
-              className={`text-xs px-2 py-0.5 rounded-full ${
-                activeTab === "quiz-responses" ? "bg-white/20" : "bg-gray-200"
-              }`}
+              className={`text-xs px-2 py-0.5 rounded-full ${activeTab === "quiz-responses" ? "bg-white/20" : "bg-gray-200"
+                }`}
             >
               {quizResponses.length}
             </span>
           </button>
           <button
             onClick={() => setActiveTab("folders")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
-              activeTab === "folders"
-                ? "bg-orange-600 text-white shadow-sm"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${activeTab === "folders"
+              ? "bg-orange-600 text-white shadow-sm"
+              : "text-gray-600 hover:bg-gray-100"
+              }`}
           >
             <FolderIcon size={18} />
             Folders
             <span
-              className={`text-xs px-2 py-0.5 rounded-full ${
-                activeTab === "folders" ? "bg-white/20" : "bg-gray-200"
-              }`}
+              className={`text-xs px-2 py-0.5 rounded-full ${activeTab === "folders" ? "bg-white/20" : "bg-gray-200"
+                }`}
             >
               {folders.length}
             </span>
@@ -985,11 +969,10 @@ export function Dashboard({
                               })()}
                           </div>
                           <span
-                            className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0 ${
-                              post.status === "published"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
-                            }`}
+                            className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0 ${post.status === "published"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-yellow-100 text-yellow-800"
+                              }`}
                           >
                             {post.status}
                           </span>
@@ -1278,11 +1261,10 @@ export function Dashboard({
                           </div>
                         </div>
                         <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            quiz.status === "published"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-yellow-100 text-yellow-800"
-                          }`}
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${quiz.status === "published"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
+                            }`}
                         >
                           {quiz.status}
                         </span>
@@ -1497,31 +1479,31 @@ export function Dashboard({
                             >
                               {(response.contact_info?.email ||
                                 response.contact_info?.phone) && (
-                                <button
-                                  onClick={() => {
-                                    setSelectedResponse({
-                                      id: response.id,
-                                      email:
-                                        response.contact_info?.email || null,
-                                      phone:
-                                        response.contact_info?.phone || null,
-                                      subject: "Quiz Response",
-                                      message: `Quiz: ${getQuizTitle(
-                                        response.quiz_id
-                                      )}`,
-                                      post_id: null,
-                                      post_author_id: null,
-                                      session_id: null,
-                                      created_at: response.completed_at,
-                                    } as FormSubmission);
-                                    setReplyModalOpen(true);
-                                  }}
-                                  className="p-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                                  title="Reply"
-                                >
-                                  <Reply size={20} />
-                                </button>
-                              )}
+                                  <button
+                                    onClick={() => {
+                                      setSelectedResponse({
+                                        id: response.id,
+                                        email:
+                                          response.contact_info?.email || null,
+                                        phone:
+                                          response.contact_info?.phone || null,
+                                        subject: "Quiz Response",
+                                        message: `Quiz: ${getQuizTitle(
+                                          response.quiz_id
+                                        )}`,
+                                        post_id: null,
+                                        post_author_id: null,
+                                        session_id: null,
+                                        created_at: response.completed_at,
+                                      } as FormSubmission);
+                                      setReplyModalOpen(true);
+                                    }}
+                                    className="p-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                    title="Reply"
+                                  >
+                                    <Reply size={20} />
+                                  </button>
+                                )}
                             </div>
                           </div>
                         </div>
@@ -1842,7 +1824,7 @@ export function Dashboard({
         {/* Add Posts to Folder Modal */}
         {showAddPostsModal && selectedFolderForPosts && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
             onClick={() => {
               setShowAddPostsModal(false);
               setSelectedPostIds(new Set());
@@ -1914,22 +1896,20 @@ export function Dashboard({
                         <div
                           key={post.id}
                           onClick={() => togglePostSelection(post.id)}
-                          className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors ${
-                            inFolder
-                              ? isSelected
-                                ? "border-orange-500 bg-orange-50"
-                                : "border-blue-300 bg-blue-50"
-                              : isSelected
+                          className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-colors ${inFolder
+                            ? isSelected
+                              ? "border-orange-500 bg-orange-50"
+                              : "border-blue-300 bg-blue-50"
+                            : isSelected
                               ? "border-orange-500 bg-orange-50"
                               : "border-gray-200 hover:border-orange-300 hover:bg-orange-50/50"
-                          }`}
+                            }`}
                         >
                           <div
-                            className={`flex-shrink-0 w-5 h-5 border-2 rounded flex items-center justify-center ${
-                              isSelected
-                                ? "border-orange-500 bg-orange-500"
-                                : "border-gray-300"
-                            }`}
+                            className={`flex-shrink-0 w-5 h-5 border-2 rounded flex items-center justify-center ${isSelected
+                              ? "border-orange-500 bg-orange-500"
+                              : "border-gray-300"
+                              }`}
                           >
                             {isSelected && (
                               <Check size={14} className="text-white" />
@@ -1950,11 +1930,10 @@ export function Dashboard({
                               <span>{formatDate(post.createdAt)}</span>
                               <span>•</span>
                               <span
-                                className={`px-2 py-0.5 rounded-full text-xs ${
-                                  post.status === "published"
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-yellow-100 text-yellow-800"
-                                }`}
+                                className={`px-2 py-0.5 rounded-full text-xs ${post.status === "published"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                                  }`}
                               >
                                 {post.status}
                               </span>
@@ -1970,9 +1949,8 @@ export function Dashboard({
               <div className="flex items-center justify-between p-6 border-t border-gray-200">
                 <div className="text-sm text-gray-600">
                   {selectedPostIds.size > 0
-                    ? `${selectedPostIds.size} post${
-                        selectedPostIds.size > 1 ? "s" : ""
-                      } selected`
+                    ? `${selectedPostIds.size} post${selectedPostIds.size > 1 ? "s" : ""
+                    } selected`
                     : "No posts selected"}
                 </div>
                 <div className="flex gap-3">

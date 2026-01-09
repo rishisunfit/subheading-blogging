@@ -43,7 +43,7 @@ export function QuizModal({ isOpen, onClose, onSelect }: QuizModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
@@ -100,11 +100,10 @@ export function QuizModal({ isOpen, onClose, onSelect }: QuizModalProps) {
                         <span>{quiz.questions.length} questions</span>
                         <span>•</span>
                         <span
-                          className={`px-2 py-0.5 rounded-full text-xs ${
-                            quiz.status === "published"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-yellow-100 text-yellow-800"
-                          }`}
+                          className={`px-2 py-0.5 rounded-full text-xs ${quiz.status === "published"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
+                            }`}
                         >
                           {quiz.status}
                         </span>

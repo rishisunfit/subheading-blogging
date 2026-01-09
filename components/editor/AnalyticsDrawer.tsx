@@ -316,15 +316,14 @@ export function AnalyticsDrawer({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity"
+        className="fixed inset-0 bg-black/50 z-40 transition-opacity backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Drawer */}
       <div
-        className={`fixed left-0 top-0 h-full w-[90vw] max-w-7xl bg-gray-50 z-50 shadow-2xl transform transition-transform duration-300 ease-in-out overflow-y-auto ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed left-0 top-0 h-full w-[90vw] max-w-7xl bg-gray-50 z-50 shadow-2xl transform transition-transform duration-300 ease-in-out overflow-y-auto ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-10">
           <div>
@@ -485,18 +484,17 @@ export function AnalyticsDrawer({
                           {/* Header */}
                           <header className="mb-8">
                             <div
-                              className={`${
-                                safeTemplate.alignment === "center"
-                                  ? "text-center"
-                                  : safeTemplate.alignment === "right"
+                              className={`${safeTemplate.alignment === "center"
+                                ? "text-center"
+                                : safeTemplate.alignment === "right"
                                   ? "text-right"
                                   : "text-left"
-                              } tracking-[0.18em] uppercase mb-4`}
+                                } tracking-[0.18em] uppercase mb-4`}
                               style={{
                                 fontFamily: safeTemplate.seriesFont
                                   ? fontOptions.find(
-                                      (f) => f.name === safeTemplate.seriesFont
-                                    )?.value || safeTemplate.seriesFont
+                                    (f) => f.name === safeTemplate.seriesFont
+                                  )?.value || safeTemplate.seriesFont
                                   : undefined,
                                 fontWeight: safeTemplate.seriesWeight || "700",
                                 fontSize: safeTemplate.seriesSize || "0.75rem",
@@ -507,25 +505,24 @@ export function AnalyticsDrawer({
                             >
                               {(safeTemplate.seriesName || "").trim()}
                               {(safeTemplate.seriesName || "").trim() &&
-                              (safeTemplate.volume || "").trim()
+                                (safeTemplate.volume || "").trim()
                                 ? " • "
                                 : ""}
                               {(safeTemplate.volume || "").trim() || ""}
                             </div>
 
                             <h1
-                              className={`mb-4 ${
-                                safeTemplate.alignment === "center"
-                                  ? "text-center"
-                                  : safeTemplate.alignment === "right"
+                              className={`mb-4 ${safeTemplate.alignment === "center"
+                                ? "text-center"
+                                : safeTemplate.alignment === "right"
                                   ? "text-right"
                                   : "text-left"
-                              }`}
+                                }`}
                               style={{
                                 fontFamily: safeTemplate.titleFont
                                   ? fontOptions.find(
-                                      (f) => f.name === safeTemplate.titleFont
-                                    )?.value || safeTemplate.titleFont
+                                    (f) => f.name === safeTemplate.titleFont
+                                  )?.value || safeTemplate.titleFont
                                   : headingFont,
                                 fontWeight:
                                   safeTemplate.titleWeight ||
@@ -542,19 +539,18 @@ export function AnalyticsDrawer({
 
                             {(safeTemplate.subtitle || "").trim() ? (
                               <p
-                                className={`mb-6 italic ${
-                                  safeTemplate.alignment === "center"
-                                    ? "text-center"
-                                    : safeTemplate.alignment === "right"
+                                className={`mb-6 italic ${safeTemplate.alignment === "center"
+                                  ? "text-center"
+                                  : safeTemplate.alignment === "right"
                                     ? "text-right"
                                     : "text-left"
-                                }`}
+                                  }`}
                                 style={{
                                   fontFamily: safeTemplate.subtitleFont
                                     ? fontOptions.find(
-                                        (f) =>
-                                          f.name === safeTemplate.subtitleFont
-                                      )?.value || safeTemplate.subtitleFont
+                                      (f) =>
+                                        f.name === safeTemplate.subtitleFont
+                                    )?.value || safeTemplate.subtitleFont
                                     : bodyFont,
                                   fontWeight:
                                     safeTemplate.subtitleWeight ||
@@ -572,18 +568,17 @@ export function AnalyticsDrawer({
                             ) : null}
 
                             <div
-                              className={`text-sm ${
-                                safeTemplate.alignment === "center"
-                                  ? "text-center"
-                                  : safeTemplate.alignment === "right"
+                              className={`text-sm ${safeTemplate.alignment === "center"
+                                ? "text-center"
+                                : safeTemplate.alignment === "right"
                                   ? "text-right"
                                   : "text-left"
-                              }`}
+                                }`}
                               style={{
                                 fontFamily: safeTemplate.bylineFont
                                   ? fontOptions.find(
-                                      (f) => f.name === safeTemplate.bylineFont
-                                    )?.value || safeTemplate.bylineFont
+                                    (f) => f.name === safeTemplate.bylineFont
+                                  )?.value || safeTemplate.bylineFont
                                   : bodyFont,
                                 fontWeight:
                                   safeTemplate.bylineWeight ||
@@ -599,12 +594,12 @@ export function AnalyticsDrawer({
                                 : "By Unknown"}
                               {safeTemplate.date
                                 ? ` • ${new Date(
-                                    safeTemplate.date
-                                  ).toLocaleDateString("en-US", {
-                                    month: "long",
-                                    day: "numeric",
-                                    year: "numeric",
-                                  })}`
+                                  safeTemplate.date
+                                ).toLocaleDateString("en-US", {
+                                  month: "long",
+                                  day: "numeric",
+                                  year: "numeric",
+                                })}`
                                 : ""}
                             </div>
                           </header>
