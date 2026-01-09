@@ -144,7 +144,7 @@ export default function LandingPage() {
           {/* Login Link */}
           <p className="text-center text-gray-500 mt-8">
             Already have an account?{" "}
-            <Link href="/login" className="text-gray-900 font-medium hover:underline">
+            <Link href="https://rishfits.bloggish.io/login" className="text-gray-900 font-medium hover:underline">
               Log in
             </Link>
           </p>
