@@ -100,6 +100,7 @@ import { VideoTimestampModal } from "./VideoTimestampModal";
 import { QuizModal } from "./QuizModal";
 import { ButtonModal, type ButtonConfig } from "./ButtonModal";
 import { ColorPickerPopover } from "./ColorPickerPopover";
+import { LinkModal } from "./LinkModal";
 import { NodeSelection } from "prosemirror-state";
 import { uploadImageToStorage, uploadDataURLToStorage } from "@/lib/storage";
 import { useAuth } from "@/hooks/useAuth";
@@ -281,6 +282,8 @@ export function Editor({
   const [showVideoTimestampModal, setShowVideoTimestampModal] = useState(false);
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [showButtonModal, setShowButtonModal] = useState(false);
+  const [showLinkModal, setShowLinkModal] = useState(false);
+  const [previousLinkUrl, setPreviousLinkUrl] = useState("");
   const [selectedVideoId, setSelectedVideoId] = useState<string>("");
   const [selectedVideo, setSelectedVideo] = useState<{
     videoId: string;
@@ -772,6 +775,30 @@ export function Editor({
     }
     setShowLinkInput(false);
     setLinkUrl("");
+  };
+
+  // Handle link insertion from LinkModal
+  const handleInsertLink = (url: string) => {
+    if (url === "") {
+      editor?.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
+    }
+
+    // Check if there's a selection
+    const { from, to } = editor?.state.selection || { from: 0, to: 0 };
+    const hasSelection = from !== to;
+
+    if (hasSelection) {
+      // If text is selected, apply the link to it
+      editor?.chain().focus().setLink({ href: url }).run();
+    } else {
+      // If no text is selected, insert the URL as text with a link
+      editor?.chain().focus().insertContent({
+        type: 'text',
+        text: url,
+        marks: [{ type: 'link', attrs: { href: url } }],
+      }).run();
+    }
   };
 
   const handleSave = async () => {
@@ -2187,10 +2214,9 @@ export function Editor({
               <div className="w-px h-4 bg-gray-600 mx-1" />
               <BubbleButton
                 onClick={() => {
-                  const url = prompt("Enter URL:");
-                  if (url) {
-                    editor.chain().focus().setLink({ href: url }).run();
-                  }
+                  const previousUrl = editor.getAttributes("link").href || "";
+                  setPreviousLinkUrl(previousUrl);
+                  setShowLinkModal(true);
                 }}
                 active={editor.isActive("link")}
               >
@@ -3620,6 +3646,14 @@ export function Editor({
         isOpen={showButtonModal}
         onClose={() => setShowButtonModal(false)}
         onInsert={handleInsertButton}
+      />
+
+      {/* Link Modal */}
+      <LinkModal
+        isOpen={showLinkModal}
+        onClose={() => setShowLinkModal(false)}
+        onInsertLink={handleInsertLink}
+        previousUrl={previousLinkUrl}
       />
 
       {/* Unsaved Changes Warning Modal */}

@@ -50,6 +50,7 @@ import { uploadImageToStorage, uploadDataURLToStorage } from "@/lib/storage";
 import { useAuth } from "@/hooks/useAuth";
 import { mediaApi } from "@/services/media";
 import { ButtonModal, type ButtonConfig } from "./ButtonModal";
+import { LinkModal } from "./LinkModal";
 
 interface EditorToolbarProps {
   editor: Editor;
@@ -99,6 +100,8 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [showButtonModal, setShowButtonModal] = useState(false);
+  const [showLinkModal, setShowLinkModal] = useState(false);
+  const [previousLinkUrl, setPreviousLinkUrl] = useState("");
   const [, forceUpdate] = useState({});
   const dragStartRef = useRef<{ x: number; y: number } | null>(null);
   const { showDialog } = useDialog();
@@ -141,35 +144,32 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
 
   if (!editor) return null;
 
-  const addLink = async () => {
-    const previousUrl = editor.getAttributes("link").href;
+  const addLink = () => {
+    const previousUrl = editor.getAttributes("link").href || "";
+    setPreviousLinkUrl(previousUrl);
+    setShowLinkModal(true);
+  };
 
-    // If there's already a link, extend to it
-    if (previousUrl) {
-      editor.chain().focus().extendMarkRange("link").run();
-      return;
-    }
-
-    // If text is selected, show inline editor (handled by BubbleMenu)
-    // Otherwise, prompt for URL
-    const url = await showDialog({
-      type: "prompt",
-      message: "Enter URL:",
-      defaultValue: "",
-      title: "Add Link",
-    });
-
-    if (url === null || url === false) {
-      return;
-    }
-
-    if (typeof url === "string" && url === "") {
+  const handleInsertLink = (url: string) => {
+    if (url === "") {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
       return;
     }
 
-    if (typeof url === "string") {
+    // Check if there's a selection
+    const { from, to } = editor.state.selection;
+    const hasSelection = from !== to;
+
+    if (hasSelection) {
+      // If text is selected, apply the link to it
       editor.chain().focus().setLink({ href: url }).run();
+    } else {
+      // If no text is selected, insert the URL as text with a link
+      editor.chain().focus().insertContent({
+        type: 'text',
+        text: url,
+        marks: [{ type: 'link', attrs: { href: url } }],
+      }).run();
     }
   };
 
@@ -1152,6 +1152,14 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         isOpen={showButtonModal}
         onClose={() => setShowButtonModal(false)}
         onInsert={handleInsertButton}
+      />
+
+      {/* Link Modal */}
+      <LinkModal
+        isOpen={showLinkModal}
+        onClose={() => setShowLinkModal(false)}
+        onInsertLink={handleInsertLink}
+        previousUrl={previousLinkUrl}
       />
 
       {/* Close pickers when clicking outside */}
