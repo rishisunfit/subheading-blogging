@@ -323,7 +323,7 @@ export default function CanonicalPostPage() {
   return (
     <div
       className="min-h-screen"
-      style={{ backgroundColor: template?.useGreenTemplate ? "#10B981" : styles.backgroundColor }}
+      style={{ backgroundColor: template?.useColoredTemplate ? (template.templateColor || "#10B981") : styles.backgroundColor }}
     >
       <HeatmapTracker postId={post.id} />
       <div className="max-w-3xl mx-auto px-4 py-12">
@@ -340,7 +340,7 @@ export default function CanonicalPostPage() {
                   fontFamily: template.seriesFont || "inherit",
                   fontWeight: template.seriesWeight || "400",
                   fontSize: template.seriesSize || "0.875rem",
-                  color: template.useGreenTemplate ? "#FFFFFF" : (template.seriesColor || styles.textColor),
+                  color: template.useColoredTemplate ? "#FFFFFF" : (template.seriesColor || styles.textColor),
                 }}
               >
                 {template.seriesName} • Volume {template.volume}
@@ -354,7 +354,7 @@ export default function CanonicalPostPage() {
                   fontWeight: styles.headingWeight || "700",
                   fontSize: "2.5rem",
                   lineHeight: "1.2",
-                  color: template.useGreenTemplate ? "#FFFFFF" : styles.textColor,
+                  color: template.useColoredTemplate ? "#FFFFFF" : styles.textColor,
                 }}
               >
                 {template.title}
@@ -367,7 +367,7 @@ export default function CanonicalPostPage() {
                   fontFamily: bodyFontOption.value,
                   fontWeight: template.subtitleWeight || "400",
                   fontSize: template.subtitleSize || "1.125rem",
-                  color: template.useGreenTemplate ? "#FFFFFF" : (template.subtitleColor || styles.textColor),
+                  color: template.useColoredTemplate ? "#FFFFFF" : (template.subtitleColor || styles.textColor),
                 }}
               >
                 {template.subtitle}
@@ -380,10 +380,16 @@ export default function CanonicalPostPage() {
                   fontFamily: bodyFontOption.value,
                   fontWeight: template.bylineWeight || "400",
                   fontSize: template.bylineSize || "0.875rem",
-                  color: template.useGreenTemplate ? "#FFFFFF" : (template.bylineColor || styles.secondaryColor),
+                  color: template.useColoredTemplate ? "#FFFFFF" : (template.bylineColor || styles.secondaryColor),
+                  justifyContent:
+                    template.alignment === "center"
+                      ? "center"
+                      : template.alignment === "right"
+                        ? "flex-end"
+                        : "flex-start",
                 }}
               >
-                {template.authorName && <span>By {template.authorName}</span>}
+                {template.authorName && <span>{template.authorName}</span>}
                 {template.authorName && template.date && <span>•</span>}
                 {template.date && (
                   <span className="flex items-center gap-1">
@@ -396,15 +402,15 @@ export default function CanonicalPostPage() {
           </div>
         )}
 
-        {/* Content Wrapper - White card for green template */}
-        <div className={template?.useGreenTemplate ? "bg-white rounded-lg p-8 shadow-lg" : ""}>
+        {/* Content Wrapper - White card for colored template */}
+        <div className={template?.useColoredTemplate ? "bg-white rounded-lg p-8 shadow-lg" : ""}>
           {/* Post Content */}
           <div
             className="prose prose-lg max-w-none mb-12 preview-content"
             style={{
               fontFamily: bodyFontOption.value,
               fontWeight: styles.bodyWeight || "400",
-              color: template?.useGreenTemplate ? "#000000" : styles.textColor,
+              color: template?.useColoredTemplate ? "#000000" : styles.textColor,
               "--heading-font": headingFontOption.value,
               "--heading-weight": styles.headingWeight || "700",
             } as React.CSSProperties}

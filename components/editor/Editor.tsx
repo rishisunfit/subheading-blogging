@@ -445,7 +445,7 @@ export function Editor({
             .chain()
             .focus()
             .insertContent(
-              '<p class="byline text-xs font-bold tracking-wide uppercase mb-12 border-b pb-4">By Author Name • Date</p>'
+              '<p class="byline text-xs font-bold tracking-wide uppercase mb-12">By Author Name • Date</p>'
             )
             .run();
           break;
@@ -2368,7 +2368,7 @@ export function Editor({
               }`}
             style={{
               ...editorStyles,
-              backgroundColor: templateData.useGreenTemplate ? "#10B981" : styles.backgroundColor,
+              backgroundColor: templateData.useColoredTemplate ? (templateData.templateColor || "#10B981") : styles.backgroundColor,
               color: styles.textColor,
               fontFamily:
                 fontOptions.find((f) => f.name === styles.bodyFont)?.value ||
@@ -2397,7 +2397,7 @@ export function Editor({
             >
               {/* Template Header (React inputs, not part of TipTap) */}
               {templateData.headerEnabled !== false && (
-                <div className={`mb-10 ${templateData.useGreenTemplate ? "text-white" : ""}`}>
+                <div className={`mb-10 ${templateData.useColoredTemplate ? "text-white" : ""}`}>
                   {showPreview ? (
                     <div>
                       <div
@@ -2479,7 +2479,7 @@ export function Editor({
                           : templateData.alignment === "right"
                             ? "text-right"
                             : "text-left"
-                          } tracking-[0.14em] uppercase border-b pb-4`}
+                          } tracking-[0.14em] uppercase`}
                         style={{
                           fontFamily: templateData.bylineFont
                             ? fontOptions.find(
@@ -2663,35 +2663,22 @@ export function Editor({
                           : templateData.alignment === "right"
                             ? "justify-end"
                             : "justify-start"
-                          } gap-2 tracking-[0.14em] uppercase border-b pb-4`}
+                          } gap-2 tracking-[0.14em] uppercase`}
                       >
                         <input
                           type="text"
-                          value={
-                            templateData.authorName
-                              ? `By ${templateData.authorName}`
-                              : ""
-                          }
+                          value={templateData.authorName || ""}
                           onChange={(e) => {
-                            const value = e.target.value;
-                            // Extract author name from "By Author Name" format or just use the value
-                            const authorMatch = value.match(/^By\s+(.+)$/i);
-                            const newAuthorName = authorMatch
-                              ? authorMatch[1].trim()
-                              : value.replace(/^By\s*/i, "").trim();
                             setTemplateData((prev) => ({
                               ...prev,
-                              authorName: newAuthorName,
+                              authorName: e.target.value,
                             }));
                           }}
                           className="bg-transparent border-b border-transparent focus:border-gray-300 outline-none px-1"
                           style={{
                             width: `${Math.max(
-                              (templateData.authorName
-                                ? `By ${templateData.authorName}`
-                                : ""
-                              ).length * 8,
-                              140
+                              (templateData.authorName || "").length * 8,
+                              120
                             )}px`,
                             fontFamily: templateData.bylineFont
                               ? fontOptions.find(
@@ -2753,8 +2740,8 @@ export function Editor({
                 </div>
               )}
 
-              {/* Content Area - Wrapped in white card when green template is active */}
-              <div className={templateData.useGreenTemplate ? "bg-white rounded-lg p-8 shadow-lg" : ""}>
+              {/* Content Area - Wrapped in white card when colored template is active */}
+              <div className={templateData.useColoredTemplate ? "bg-white rounded-lg p-8 shadow-lg" : ""}>
                 {showPreview ? (
                   <>
                     <div
@@ -2766,7 +2753,7 @@ export function Editor({
                         fontFamily: fontOptions.find(
                           (f) => f.name === styles.bodyFont
                         )?.value,
-                        color: templateData.useGreenTemplate ? "#000000" : undefined,
+                        color: templateData.useColoredTemplate ? "#000000" : undefined,
                       }}
                     />
                     {/* Divider before components - only show if there are components */}
@@ -2862,407 +2849,96 @@ export function Editor({
               </div>
             </div>
           </div>
-        </main>
-      </div>
+        </main >
+      </div >
 
       {/* RIGHT SIDEBAR: Properties */}
-      {showRightSidebar && (
-        <div className="w-80 bg-white border-l border-gray-200 flex flex-col shrink-0">
-          {/* Sidebar Header with Close Button on Left */}
-          <div className="p-3 border-b border-gray-100 flex items-center gap-2">
-            <button
-              onClick={() => setShowRightSidebar(false)}
-              className="p-1.5 hover:bg-gray-100 rounded-md transition-colors"
-              title="Hide sidebar"
-            >
-              <ChevronRight size={16} className="text-gray-500" />
-            </button>
-            <span className="text-sm font-semibold text-gray-700">Properties</span>
-          </div>
-          {/* Search */}
-          <div className="p-4 border-b border-gray-100">
-            <div className="relative">
-              <Search size={14} className="absolute left-3 top-3 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search..."
-                className="w-full bg-gray-50 rounded border border-gray-200 pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-gray-400"
-              />
-            </div>
-          </div>
-
-          {/* Tabs */}
-          <div className="p-4">
-            <div className="flex bg-gray-100 p-1 rounded-lg">
+      {
+        showRightSidebar && (
+          <div className="w-80 bg-white border-l border-gray-200 flex flex-col shrink-0">
+            {/* Sidebar Header with Close Button on Left */}
+            <div className="p-3 border-b border-gray-100 flex items-center gap-2">
               <button
-                onClick={() => setMode("Basic")}
-                className={`flex-1 text-sm font-medium py-1.5 rounded-md transition-all ${mode === "Basic" ? "bg-white shadow-sm" : "text-gray-500"
-                  }`}
+                onClick={() => setShowRightSidebar(false)}
+                className="p-1.5 hover:bg-gray-100 rounded-md transition-colors"
+                title="Hide sidebar"
               >
-                Basic
+                <ChevronRight size={16} className="text-gray-500" />
               </button>
-              <button
-                onClick={() => setMode("Advanced")}
-                className={`flex-1 text-sm font-medium py-1.5 rounded-md transition-all ${mode === "Advanced" ? "bg-white shadow-sm" : "text-gray-500"
-                  }`}
-              >
-                Advanced
-              </button>
+              <span className="text-sm font-semibold text-gray-700">Properties</span>
             </div>
-          </div>
+            {/* Search */}
+            <div className="p-4 border-b border-gray-100">
+              <div className="relative">
+                <Search size={14} className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-full bg-gray-50 rounded border border-gray-200 pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-gray-400"
+                />
+              </div>
+            </div>
 
-          {/* Controls Scroll Area */}
-          <div className="flex-1 overflow-y-auto px-4 pb-4">
-            {/* Video Options - Show when video is selected */}
-            {selectedVideo && !showPreview && (
-              <div className="mb-6 pb-6 border-b border-gray-200">
-                <div className="flex items-center justify-between mb-4">
-                  <SectionHeader title="Video Settings" />
-                  <button
-                    onClick={handleDeleteVideo}
-                    className="text-red-600 hover:text-red-700 text-sm font-medium"
-                  >
-                    Delete
-                  </button>
-                </div>
-
-                {/* Video Title */}
-                <div className="mb-4">
-                  <label className="block text-xs font-medium text-gray-500 mb-2">
-                    Video Title
-                  </label>
-                  <input
-                    type="text"
-                    value={selectedVideo.title || ""}
-                    onChange={(e) =>
-                      handleVideoSettingChange("title", e.target.value)
-                    }
-                    placeholder="Video Title"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-sm"
-                  />
-                </div>
-
-                {/* Video Alignment */}
-                <div className="mb-4">
-                  <label className="block text-xs font-medium text-gray-500 mb-2">
-                    Alignment
-                  </label>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleVideoAlignChange("left")}
-                      className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${selectedVideo.align === "left"
-                        ? "bg-black text-white border-black"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                        }`}
-                    >
-                      Left
-                    </button>
-                    <button
-                      onClick={() => handleVideoAlignChange("center")}
-                      className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${selectedVideo.align === "center"
-                        ? "bg-black text-white border-black"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                        }`}
-                    >
-                      Center
-                    </button>
-                    <button
-                      onClick={() => handleVideoAlignChange("right")}
-                      className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${selectedVideo.align === "right"
-                        ? "bg-black text-white border-black"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                        }`}
-                    >
-                      Right
-                    </button>
-                  </div>
-                </div>
-
-                {/* Video Theme Color */}
-                <div className="mb-4">
-                  <label className="block text-xs font-medium text-gray-500 mb-2">
-                    Player Theme Color
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="color"
-                      value={selectedVideo.primaryColor || "#F48120"}
-                      onChange={(e) => handleVideoThemeChange(e.target.value)}
-                      className="w-16 h-10 rounded border border-gray-300 cursor-pointer"
-                    />
-                    <input
-                      type="text"
-                      value={selectedVideo.primaryColor || "#F48120"}
-                      onChange={(e) => handleVideoThemeChange(e.target.value)}
-                      placeholder="#F48120"
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-sm font-mono"
-                    />
-                  </div>
-                  <p className="mt-1 text-xs text-gray-500">
-                    Customize the seekbar and play button color
-                  </p>
-                </div>
-
-                {/* Display Options */}
-                <div className="mb-6 space-y-3">
-                  <label className="block text-xs font-medium text-gray-500 mb-2">
-                    Display Options
-                  </label>
-
-                  {/* Autoplay Toggle */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-700">Autoplay</span>
-                    <button
-                      onClick={() =>
-                        handleVideoSettingChange(
-                          "autoplay",
-                          !selectedVideo.autoplay
-                        )
-                      }
-                      className={`relative w-11 h-6 rounded-full transition-colors ${selectedVideo.autoplay ? "bg-indigo-600" : "bg-gray-200"
-                        }`}
-                    >
-                      <div
-                        className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${selectedVideo.autoplay
-                          ? "translate-x-5"
-                          : "translate-x-0"
-                          }`}
-                      />
-                    </button>
-                  </div>
-
-                  {/* Show Duration Toggle */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-700">Show Duration</span>
-                    <button
-                      onClick={() =>
-                        handleVideoSettingChange(
-                          "showDuration",
-                          !selectedVideo.showDuration
-                        )
-                      }
-                      className={`relative w-11 h-6 rounded-full transition-colors ${selectedVideo.showDuration
-                        ? "bg-indigo-600"
-                        : "bg-gray-200"
-                        }`}
-                    >
-                      <div
-                        className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${selectedVideo.showDuration
-                          ? "translate-x-5"
-                          : "translate-x-0"
-                          }`}
-                      />
-                    </button>
-                  </div>
-
-                  {/* Show Background Toggle */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-700">
-                      Show Background
-                    </span>
-                    <button
-                      onClick={() =>
-                        handleVideoSettingChange(
-                          "showBackground",
-                          !selectedVideo.showBackground
-                        )
-                      }
-                      className={`relative w-11 h-6 rounded-full transition-colors ${selectedVideo.showBackground
-                        ? "bg-indigo-600"
-                        : "bg-gray-200"
-                        }`}
-                    >
-                      <div
-                        className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${selectedVideo.showBackground
-                          ? "translate-x-5"
-                          : "translate-x-0"
-                          }`}
-                      />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Timestamps Button */}
+            {/* Tabs */}
+            <div className="p-4">
+              <div className="flex bg-gray-100 p-1 rounded-lg">
                 <button
-                  onClick={() => {
-                    setSelectedVideoId(selectedVideo.videoId);
-                    setShowVideoTimestampModal(true);
-                  }}
-                  className="w-full px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg transition-colors text-sm font-medium flex items-center justify-center gap-2"
+                  onClick={() => setMode("Basic")}
+                  className={`flex-1 text-sm font-medium py-1.5 rounded-md transition-all ${mode === "Basic" ? "bg-white shadow-sm" : "text-gray-500"
+                    }`}
                 >
-                  <Clock size={16} />
-                  Manage Timestamps
+                  Basic
+                </button>
+                <button
+                  onClick={() => setMode("Advanced")}
+                  className={`flex-1 text-sm font-medium py-1.5 rounded-md transition-all ${mode === "Advanced" ? "bg-white shadow-sm" : "text-gray-500"
+                    }`}
+                >
+                  Advanced
                 </button>
               </div>
-            )}
-
-            {/* Colors Section */}
-            <div className="mb-6">
-              <SectionHeader title="Colors" />
-              <div className="space-y-3">
-                <ColorInput
-                  label="Background"
-                  value={styles.backgroundColor}
-                  onChange={(v) => updateStyle("backgroundColor", v)}
-                />
-                <ColorInput
-                  label="Text on background"
-                  value={styles.textColor}
-                  onChange={(v) => updateStyle("textColor", v)}
-                />
-                <ColorInput
-                  label="Primary"
-                  value={styles.primaryColor}
-                  onChange={(v) => updateStyle("primaryColor", v)}
-                  info
-                />
-                <ColorInput
-                  label="Text on primary"
-                  value={styles.primaryTextColor}
-                  onChange={(v) => updateStyle("primaryTextColor", v)}
-                />
-                <ColorInput
-                  label="Secondary"
-                  value={styles.secondaryColor}
-                  onChange={(v) => updateStyle("secondaryColor", v)}
-                  info
-                />
-                <ColorInput
-                  label="Link text"
-                  value={styles.linkColor}
-                  onChange={(v) => updateStyle("linkColor", v)}
-                />
-              </div>
             </div>
 
-            {/* Typography Section */}
-            <div className="mb-6 border-t border-gray-100 pt-4">
-              <SectionHeader title="Typography" />
-              <div className="space-y-4">
-                {/* Heading Typography */}
-                <div className="space-y-3">
-                  <div className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-                    Heading
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">Font family</span>
-                    <FontSelect
-                      value={styles.headingFont}
-                      onChange={(v) => updateStyle("headingFont", v)}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">Font weight</span>
-                    <WeightSelect
-                      value={styles.headingWeight}
-                      onChange={(v) => updateStyle("headingWeight", v)}
-                    />
-                  </div>
-                </div>
-
-                {/* Body Typography */}
-                {mode === "Advanced" && (
-                  <div className="space-y-3 pt-3 border-t border-gray-100">
-                    <div className="text-xs font-medium text-gray-400 uppercase tracking-wide">
-                      Body
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Font family</span>
-                      <FontSelect
-                        value={styles.bodyFont}
-                        onChange={(v) => updateStyle("bodyFont", v)}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Font weight</span>
-                      <WeightSelect
-                        value={styles.bodyWeight}
-                        onChange={(v) => updateStyle("bodyWeight", v)}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Template Settings Section */}
-            {!showPreview && (
-              <div className="mb-6 border-t border-gray-100 pt-4">
-                <SectionHeader title="Template Settings" />
-
-                {/* Show Header Toggle */}
-                <div className="mb-4">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm text-gray-700">Show Header</label>
+            {/* Controls Scroll Area */}
+            <div className="flex-1 overflow-y-auto px-4 pb-4">
+              {/* Video Options - Show when video is selected */}
+              {selectedVideo && !showPreview && (
+                <div className="mb-6 pb-6 border-b border-gray-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <SectionHeader title="Video Settings" />
                     <button
-                      onClick={() =>
-                        setTemplateData((prev) => ({
-                          ...prev,
-                          headerEnabled: !prev.headerEnabled,
-                        }))
-                      }
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${templateData.headerEnabled !== false
-                        ? "bg-indigo-600"
-                        : "bg-gray-200"
-                        }`}
+                      onClick={handleDeleteVideo}
+                      className="text-red-600 hover:text-red-700 text-sm font-medium"
                     >
-                      <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${templateData.headerEnabled !== false
-                          ? "translate-x-6"
-                          : "translate-x-1"
-                          }`}
-                      />
+                      Delete
                     </button>
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Toggle the editorial header (series, title, byline)
-                  </p>
-                </div>
 
-                {/* Green Template Mode Toggle */}
-                <div className="mb-4">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm text-gray-700">Green Template</label>
-                    <button
-                      onClick={() =>
-                        setTemplateData((prev) => ({
-                          ...prev,
-                          useGreenTemplate: !prev.useGreenTemplate,
-                        }))
+                  {/* Video Title */}
+                  <div className="mb-4">
+                    <label className="block text-xs font-medium text-gray-500 mb-2">
+                      Video Title
+                    </label>
+                    <input
+                      type="text"
+                      value={selectedVideo.title || ""}
+                      onChange={(e) =>
+                        handleVideoSettingChange("title", e.target.value)
                       }
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${templateData.useGreenTemplate
-                        ? "bg-green-600"
-                        : "bg-gray-200"
-                        }`}
-                    >
-                      <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${templateData.useGreenTemplate
-                          ? "translate-x-6"
-                          : "translate-x-1"
-                          }`}
-                      />
-                    </button>
+                      placeholder="Video Title"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-sm"
+                    />
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Display with green background and white content card
-                  </p>
-                </div>
 
-                {/* Template Alignment - only show if header is enabled */}
-                {templateData.headerEnabled !== false && (
+                  {/* Video Alignment */}
                   <div className="mb-4">
                     <label className="block text-xs font-medium text-gray-500 mb-2">
                       Alignment
                     </label>
                     <div className="flex gap-2">
                       <button
-                        onClick={() =>
-                          setTemplateData((prev) => ({
-                            ...prev,
-                            alignment: "left",
-                          }))
-                        }
-                        className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${(templateData.alignment || "left") === "left"
+                        onClick={() => handleVideoAlignChange("left")}
+                        className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${selectedVideo.align === "left"
                           ? "bg-black text-white border-black"
                           : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                           }`}
@@ -3270,13 +2946,8 @@ export function Editor({
                         Left
                       </button>
                       <button
-                        onClick={() =>
-                          setTemplateData((prev) => ({
-                            ...prev,
-                            alignment: "center",
-                          }))
-                        }
-                        className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${templateData.alignment === "center"
+                        onClick={() => handleVideoAlignChange("center")}
+                        className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${selectedVideo.align === "center"
                           ? "bg-black text-white border-black"
                           : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                           }`}
@@ -3284,13 +2955,8 @@ export function Editor({
                         Center
                       </button>
                       <button
-                        onClick={() =>
-                          setTemplateData((prev) => ({
-                            ...prev,
-                            alignment: "right",
-                          }))
-                        }
-                        className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${templateData.alignment === "right"
+                        onClick={() => handleVideoAlignChange("right")}
+                        className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${selectedVideo.align === "right"
                           ? "bg-black text-white border-black"
                           : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                           }`}
@@ -3299,269 +2965,617 @@ export function Editor({
                       </button>
                     </div>
                   </div>
-                )}
 
-                {/* Template Typography Controls - only show if header is enabled */}
-                {templateData.headerEnabled !== false && (
-                  <TemplateTypographyControls
-                    templateData={templateData}
-                    setTemplateData={setTemplateData}
-                  />
-                )}
-              </div>
-            )}
+                  {/* Video Theme Color */}
+                  <div className="mb-4">
+                    <label className="block text-xs font-medium text-gray-500 mb-2">
+                      Player Theme Color
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="color"
+                        value={selectedVideo.primaryColor || "#F48120"}
+                        onChange={(e) => handleVideoThemeChange(e.target.value)}
+                        className="w-16 h-10 rounded border border-gray-300 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={selectedVideo.primaryColor || "#F48120"}
+                        onChange={(e) => handleVideoThemeChange(e.target.value)}
+                        placeholder="#F48120"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-sm font-mono"
+                      />
+                    </div>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Customize the seekbar and play button color
+                    </p>
+                  </div>
 
-            {/* Preset Templates */}
-            {mode === "Advanced" && (
-              <div className="mb-6 border-t border-gray-100 pt-4">
-                <SectionHeader title="Quick Presets" />
-                <div className="grid grid-cols-2 gap-2">
-                  <PresetButton
-                    label="Editorial"
-                    onClick={() =>
-                      setStyles({
-                        ...defaultStyles,
-                        headingFont: "PT Serif",
-                        bodyFont: "Georgia",
-                      })
-                    }
+                  {/* Display Options */}
+                  <div className="mb-6 space-y-3">
+                    <label className="block text-xs font-medium text-gray-500 mb-2">
+                      Display Options
+                    </label>
+
+                    {/* Autoplay Toggle */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-700">Autoplay</span>
+                      <button
+                        onClick={() =>
+                          handleVideoSettingChange(
+                            "autoplay",
+                            !selectedVideo.autoplay
+                          )
+                        }
+                        className={`relative w-11 h-6 rounded-full transition-colors ${selectedVideo.autoplay ? "bg-indigo-600" : "bg-gray-200"
+                          }`}
+                      >
+                        <div
+                          className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${selectedVideo.autoplay
+                            ? "translate-x-5"
+                            : "translate-x-0"
+                            }`}
+                        />
+                      </button>
+                    </div>
+
+                    {/* Show Duration Toggle */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-700">Show Duration</span>
+                      <button
+                        onClick={() =>
+                          handleVideoSettingChange(
+                            "showDuration",
+                            !selectedVideo.showDuration
+                          )
+                        }
+                        className={`relative w-11 h-6 rounded-full transition-colors ${selectedVideo.showDuration
+                          ? "bg-indigo-600"
+                          : "bg-gray-200"
+                          }`}
+                      >
+                        <div
+                          className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${selectedVideo.showDuration
+                            ? "translate-x-5"
+                            : "translate-x-0"
+                            }`}
+                        />
+                      </button>
+                    </div>
+
+                    {/* Show Background Toggle */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-700">
+                        Show Background
+                      </span>
+                      <button
+                        onClick={() =>
+                          handleVideoSettingChange(
+                            "showBackground",
+                            !selectedVideo.showBackground
+                          )
+                        }
+                        className={`relative w-11 h-6 rounded-full transition-colors ${selectedVideo.showBackground
+                          ? "bg-indigo-600"
+                          : "bg-gray-200"
+                          }`}
+                      >
+                        <div
+                          className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${selectedVideo.showBackground
+                            ? "translate-x-5"
+                            : "translate-x-0"
+                            }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Timestamps Button */}
+                  <button
+                    onClick={() => {
+                      setSelectedVideoId(selectedVideo.videoId);
+                      setShowVideoTimestampModal(true);
+                    }}
+                    className="w-full px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg transition-colors text-sm font-medium flex items-center justify-center gap-2"
+                  >
+                    <Clock size={16} />
+                    Manage Timestamps
+                  </button>
+                </div>
+              )}
+
+              {/* Colors Section */}
+              <div className="mb-6">
+                <SectionHeader title="Colors" />
+                <div className="space-y-3">
+                  <ColorInput
+                    label="Background"
+                    value={styles.backgroundColor}
+                    onChange={(v) => updateStyle("backgroundColor", v)}
                   />
-                  <PresetButton
-                    label="Modern"
-                    onClick={() =>
-                      setStyles({
-                        ...defaultStyles,
-                        backgroundColor: "#1F2937",
-                        textColor: "#F9FAFB",
-                        headingFont: "Inter",
-                        bodyFont: "Inter",
-                        linkColor: "#60A5FA",
-                      })
-                    }
+                  <ColorInput
+                    label="Text on background"
+                    value={styles.textColor}
+                    onChange={(v) => updateStyle("textColor", v)}
                   />
-                  <PresetButton
-                    label="Minimal"
-                    onClick={() =>
-                      setStyles({
-                        ...defaultStyles,
-                        headingFont: "Inter",
-                        bodyFont: "Inter",
-                        primaryColor: "#000000",
-                      })
-                    }
+                  <ColorInput
+                    label="Primary"
+                    value={styles.primaryColor}
+                    onChange={(v) => updateStyle("primaryColor", v)}
+                    info
                   />
-                  <PresetButton
-                    label="Warm"
-                    onClick={() =>
-                      setStyles({
-                        ...defaultStyles,
-                        backgroundColor: "#FFFBEB",
-                        textColor: "#78350F",
-                        primaryColor: "#D97706",
-                        linkColor: "#B45309",
-                        headingFont: "Playfair Display",
-                        bodyFont: "Lora",
-                      })
-                    }
+                  <ColorInput
+                    label="Text on primary"
+                    value={styles.primaryTextColor}
+                    onChange={(v) => updateStyle("primaryTextColor", v)}
+                  />
+                  <ColorInput
+                    label="Secondary"
+                    value={styles.secondaryColor}
+                    onChange={(v) => updateStyle("secondaryColor", v)}
+                    info
+                  />
+                  <ColorInput
+                    label="Link text"
+                    value={styles.linkColor}
+                    onChange={(v) => updateStyle("linkColor", v)}
                   />
                 </div>
               </div>
-            )}
+
+              {/* Typography Section */}
+              <div className="mb-6 border-t border-gray-100 pt-4">
+                <SectionHeader title="Typography" />
+                <div className="space-y-4">
+                  {/* Heading Typography */}
+                  <div className="space-y-3">
+                    <div className="text-xs font-medium text-gray-400 uppercase tracking-wide">
+                      Heading
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">Font family</span>
+                      <FontSelect
+                        value={styles.headingFont}
+                        onChange={(v) => updateStyle("headingFont", v)}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">Font weight</span>
+                      <WeightSelect
+                        value={styles.headingWeight}
+                        onChange={(v) => updateStyle("headingWeight", v)}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Body Typography */}
+                  {mode === "Advanced" && (
+                    <div className="space-y-3 pt-3 border-t border-gray-100">
+                      <div className="text-xs font-medium text-gray-400 uppercase tracking-wide">
+                        Body
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-500">Font family</span>
+                        <FontSelect
+                          value={styles.bodyFont}
+                          onChange={(v) => updateStyle("bodyFont", v)}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-500">Font weight</span>
+                        <WeightSelect
+                          value={styles.bodyWeight}
+                          onChange={(v) => updateStyle("bodyWeight", v)}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Template Settings Section */}
+              {!showPreview && (
+                <div className="mb-6 border-t border-gray-100 pt-4">
+                  <SectionHeader title="Template Settings" />
+
+                  {/* Show Header Toggle */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm text-gray-700">Show Header</label>
+                      <button
+                        onClick={() =>
+                          setTemplateData((prev) => ({
+                            ...prev,
+                            headerEnabled: !prev.headerEnabled,
+                          }))
+                        }
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${templateData.headerEnabled !== false
+                          ? "bg-indigo-600"
+                          : "bg-gray-200"
+                          }`}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${templateData.headerEnabled !== false
+                            ? "translate-x-6"
+                            : "translate-x-1"
+                            }`}
+                        />
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Toggle the editorial header (series, title, byline)
+                    </p>
+                  </div>
+
+                  {/* Colored Template Mode Toggle */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-sm text-gray-700">Colored Template</label>
+                      <button
+                        onClick={() =>
+                          setTemplateData((prev) => ({
+                            ...prev,
+                            useColoredTemplate: !prev.useColoredTemplate,
+                          }))
+                        }
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors`}
+                        style={{
+                          backgroundColor: templateData.useColoredTemplate
+                            ? (templateData.templateColor || "#10B981")
+                            : "#E5E7EB"
+                        }}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${templateData.useColoredTemplate
+                            ? "translate-x-6"
+                            : "translate-x-1"
+                            }`}
+                        />
+                      </button>
+                    </div>
+                    {templateData.useColoredTemplate && (
+                      <div className="flex items-center gap-2 mt-2">
+                        <label className="text-xs text-gray-600">Background Color:</label>
+                        <input
+                          type="color"
+                          value={templateData.templateColor || "#10B981"}
+                          onChange={(e) =>
+                            setTemplateData((prev) => ({
+                              ...prev,
+                              templateColor: e.target.value,
+                            }))
+                          }
+                          className="h-8 w-16 rounded border border-gray-300 cursor-pointer"
+                        />
+                        <span className="text-xs text-gray-500 font-mono">
+                          {templateData.templateColor || "#10B981"}
+                        </span>
+                      </div>
+                    )}
+                    <p className="text-xs text-gray-400 mt-1">
+                      Display with custom background color and white content card
+                    </p>
+                  </div>
+
+                  {/* Template Alignment - only show if header is enabled */}
+                  {templateData.headerEnabled !== false && (
+                    <div className="mb-4">
+                      <label className="block text-xs font-medium text-gray-500 mb-2">
+                        Alignment
+                      </label>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() =>
+                            setTemplateData((prev) => ({
+                              ...prev,
+                              alignment: "left",
+                            }))
+                          }
+                          className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${(templateData.alignment || "left") === "left"
+                            ? "bg-black text-white border-black"
+                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                            }`}
+                        >
+                          Left
+                        </button>
+                        <button
+                          onClick={() =>
+                            setTemplateData((prev) => ({
+                              ...prev,
+                              alignment: "center",
+                            }))
+                          }
+                          className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${templateData.alignment === "center"
+                            ? "bg-black text-white border-black"
+                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                            }`}
+                        >
+                          Center
+                        </button>
+                        <button
+                          onClick={() =>
+                            setTemplateData((prev) => ({
+                              ...prev,
+                              alignment: "right",
+                            }))
+                          }
+                          className={`flex-1 px-3 py-2 rounded-lg border text-sm transition-colors ${templateData.alignment === "right"
+                            ? "bg-black text-white border-black"
+                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                            }`}
+                        >
+                          Right
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Template Typography Controls - only show if header is enabled */}
+                  {templateData.headerEnabled !== false && (
+                    <TemplateTypographyControls
+                      templateData={templateData}
+                      setTemplateData={setTemplateData}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* Preset Templates */}
+              {mode === "Advanced" && (
+                <div className="mb-6 border-t border-gray-100 pt-4">
+                  <SectionHeader title="Quick Presets" />
+                  <div className="grid grid-cols-2 gap-2">
+                    <PresetButton
+                      label="Editorial"
+                      onClick={() =>
+                        setStyles({
+                          ...defaultStyles,
+                          headingFont: "PT Serif",
+                          bodyFont: "Georgia",
+                        })
+                      }
+                    />
+                    <PresetButton
+                      label="Modern"
+                      onClick={() =>
+                        setStyles({
+                          ...defaultStyles,
+                          backgroundColor: "#1F2937",
+                          textColor: "#F9FAFB",
+                          headingFont: "Inter",
+                          bodyFont: "Inter",
+                          linkColor: "#60A5FA",
+                        })
+                      }
+                    />
+                    <PresetButton
+                      label="Minimal"
+                      onClick={() =>
+                        setStyles({
+                          ...defaultStyles,
+                          headingFont: "Inter",
+                          bodyFont: "Inter",
+                          primaryColor: "#000000",
+                        })
+                      }
+                    />
+                    <PresetButton
+                      label="Warm"
+                      onClick={() =>
+                        setStyles({
+                          ...defaultStyles,
+                          backgroundColor: "#FFFBEB",
+                          textColor: "#78350F",
+                          primaryColor: "#D97706",
+                          linkColor: "#B45309",
+                          headingFont: "Playfair Display",
+                          bodyFont: "Lora",
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Close save dropdown when clicking outside */}
-      {showSaveDropdown && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => setShowSaveDropdown(false)}
-        />
-      )}
-
-      {/* Block Menu Popup */}
-      {showBlockMenu && (
-        <>
+      {
+        showSaveDropdown && (
           <div
             className="fixed inset-0 z-40"
-            onClick={() => setShowBlockMenu(false)}
+            onClick={() => setShowSaveDropdown(false)}
           />
-          <div
-            className="fixed z-50 bg-white rounded-xl shadow-xl border border-gray-100 p-4 w-64"
-            style={{ top: blockMenuPosition.top, left: blockMenuPosition.left }}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <span className="font-bold text-sm">Add Block</span>
-              <button onClick={() => setShowBlockMenu(false)}>
-                <X size={14} className="text-gray-400" />
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <BlockMenuItem
-                icon={
-                  <span className="text-xl font-serif font-bold">
-                    H<sub className="text-xs">1</sub>
-                  </span>
-                }
-                label="Title"
-                onClick={() => insertBlock("title")}
-              />
-              <BlockMenuItem
-                icon={<Type size={20} />}
-                label="Text"
-                onClick={() => insertBlock("text")}
-              />
-              <BlockMenuItem
-                icon={<ImageIcon size={20} />}
-                label="Image"
-                onClick={() => insertBlock("image")}
-              />
-              <BlockMenuItem
-                icon={<span className="font-serif text-lg">T</span>}
-                label="Byline"
-                onClick={() => insertBlock("byline")}
-              />
-              <BlockMenuItem
-                icon={<Calendar size={20} />}
-                label="Date"
-                onClick={() => insertBlock("date")}
-              />
-              <BlockMenuItem
-                icon={<Code size={20} />}
-                label="Code"
-                onClick={() => insertBlock("code")}
-              />
-              <BlockMenuItem
-                icon={<Quote size={20} />}
-                label="Quote"
-                onClick={() => insertBlock("quote")}
-              />
-              <BlockMenuItem
-                icon={<div className="w-8 h-0.5 bg-gray-400" />}
-                label="Divider"
-                onClick={() => insertBlock("divider")}
-              />
-              <BlockMenuItem
-                icon={<Space size={20} />}
-                label="Space"
-                onClick={() => insertBlock("centerspace")}
-              />
-              <BlockMenuItem
-                icon={
-                  <div className="flex flex-col gap-1">
-                    <div className="w-6 h-0.5 bg-gray-300" />
-                    <div className="w-6 h-0.5 bg-gray-300" />
-                  </div>
-                }
-                label="Big Space"
-                onClick={() => insertBlock("centerspace-large")}
-              />
-              <BlockMenuItem
-                icon={<AlignCenterHorizontal size={20} />}
-                label="Center All"
-                onClick={() => insertBlock("center-all")}
-              />
-              <BlockMenuItem
-                icon={<Clock size={20} />}
-                label="Reading Time"
-                onClick={() => insertBlock("reading-time")}
-              />
-              <BlockMenuItem
-                icon={<Badge size={20} />}
-                label="Badge"
-                onClick={() => insertBlock("badge")}
-              />
-              <BlockMenuItem
-                icon={
-                  <div className="w-5 h-5 border-2 border-indigo-500 rounded-full" />
-                }
-                label="Outline Badge"
-                onClick={() => insertBlock("badge-outline")}
-              />
-              <BlockMenuItem
-                icon={<Minus size={20} />}
-                label="Thin Line"
-                onClick={() => insertBlock("line-thin")}
-              />
-              <BlockMenuItem
-                icon={<MoreHorizontal size={20} />}
-                label="Dots"
-                onClick={() => insertBlock("line-dots")}
-              />
-              <BlockMenuItem
-                icon={<Sparkles size={20} />}
-                label="Stars"
-                onClick={() => insertBlock("line-ornament")}
-              />
-              <BlockMenuItem
-                icon={<div className="text-gray-400">～～</div>}
-                label="Wave"
-                onClick={() => insertBlock("line-wave")}
-              />
-              <BlockMenuItem
-                icon={<div className="w-6 h-1 bg-gray-800 rounded" />}
-                label="Thick Line"
-                onClick={() => insertBlock("line-thick")}
-              />
-              <BlockMenuItem
-                icon={<div className="w-6 border-b border-gray-400" />}
-                label="Full Line"
-                onClick={() => insertBlock("line-full")}
-              />
-            </div>
-            {/* Callout Boxes Section */}
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="text-xs text-gray-400 uppercase tracking-wide mb-2 px-1">
-                Callout Boxes
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  onClick={() => insertBlock("callout-yellow")}
-                  className="p-2 rounded border border-gray-100 hover:border-yellow-300 hover:bg-yellow-50 transition-all"
-                  title="Yellow Callout"
-                >
-                  <div className="w-full h-6 rounded bg-yellow-100 border-l-4 border-yellow-500" />
-                </button>
-                <button
-                  onClick={() => insertBlock("callout-blue")}
-                  className="p-2 rounded border border-gray-100 hover:border-blue-300 hover:bg-blue-50 transition-all"
-                  title="Blue Callout"
-                >
-                  <div className="w-full h-6 rounded bg-blue-100 border-l-4 border-blue-500" />
-                </button>
-                <button
-                  onClick={() => insertBlock("callout-green")}
-                  className="p-2 rounded border border-gray-100 hover:border-green-300 hover:bg-green-50 transition-all"
-                  title="Green Callout"
-                >
-                  <div className="w-full h-6 rounded bg-green-100 border-l-4 border-green-500" />
-                </button>
-                <button
-                  onClick={() => insertBlock("callout-red")}
-                  className="p-2 rounded border border-gray-100 hover:border-red-300 hover:bg-red-50 transition-all"
-                  title="Red Callout"
-                >
-                  <div className="w-full h-6 rounded bg-red-100 border-l-4 border-red-500" />
-                </button>
-                <button
-                  onClick={() => insertBlock("callout-purple")}
-                  className="p-2 rounded border border-gray-100 hover:border-purple-300 hover:bg-purple-50 transition-all"
-                  title="Purple Callout"
-                >
-                  <div className="w-full h-6 rounded bg-purple-100 border-l-4 border-purple-500" />
-                </button>
-                <button
-                  onClick={() => insertBlock("callout-gray")}
-                  className="p-2 rounded border border-gray-100 hover:border-gray-300 hover:bg-gray-50 transition-all"
-                  title="Gray Callout"
-                >
-                  <div className="w-full h-6 rounded bg-gray-100 border-l-4 border-gray-500" />
+        )
+      }
+
+      {/* Block Menu Popup */}
+      {
+        showBlockMenu && (
+          <>
+            <div
+              className="fixed inset-0 z-40"
+              onClick={() => setShowBlockMenu(false)}
+            />
+            <div
+              className="fixed z-50 bg-white rounded-xl shadow-xl border border-gray-100 p-4 w-64"
+              style={{ top: blockMenuPosition.top, left: blockMenuPosition.left }}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <span className="font-bold text-sm">Add Block</span>
+                <button onClick={() => setShowBlockMenu(false)}>
+                  <X size={14} className="text-gray-400" />
                 </button>
               </div>
+              <div className="grid grid-cols-2 gap-2">
+                <BlockMenuItem
+                  icon={
+                    <span className="text-xl font-serif font-bold">
+                      H<sub className="text-xs">1</sub>
+                    </span>
+                  }
+                  label="Title"
+                  onClick={() => insertBlock("title")}
+                />
+                <BlockMenuItem
+                  icon={<Type size={20} />}
+                  label="Text"
+                  onClick={() => insertBlock("text")}
+                />
+                <BlockMenuItem
+                  icon={<ImageIcon size={20} />}
+                  label="Image"
+                  onClick={() => insertBlock("image")}
+                />
+                <BlockMenuItem
+                  icon={<span className="font-serif text-lg">T</span>}
+                  label="Byline"
+                  onClick={() => insertBlock("byline")}
+                />
+                <BlockMenuItem
+                  icon={<Calendar size={20} />}
+                  label="Date"
+                  onClick={() => insertBlock("date")}
+                />
+                <BlockMenuItem
+                  icon={<Code size={20} />}
+                  label="Code"
+                  onClick={() => insertBlock("code")}
+                />
+                <BlockMenuItem
+                  icon={<Quote size={20} />}
+                  label="Quote"
+                  onClick={() => insertBlock("quote")}
+                />
+                <BlockMenuItem
+                  icon={<div className="w-8 h-0.5 bg-gray-400" />}
+                  label="Divider"
+                  onClick={() => insertBlock("divider")}
+                />
+                <BlockMenuItem
+                  icon={<Space size={20} />}
+                  label="Space"
+                  onClick={() => insertBlock("centerspace")}
+                />
+                <BlockMenuItem
+                  icon={
+                    <div className="flex flex-col gap-1">
+                      <div className="w-6 h-0.5 bg-gray-300" />
+                      <div className="w-6 h-0.5 bg-gray-300" />
+                    </div>
+                  }
+                  label="Big Space"
+                  onClick={() => insertBlock("centerspace-large")}
+                />
+                <BlockMenuItem
+                  icon={<AlignCenterHorizontal size={20} />}
+                  label="Center All"
+                  onClick={() => insertBlock("center-all")}
+                />
+                <BlockMenuItem
+                  icon={<Clock size={20} />}
+                  label="Reading Time"
+                  onClick={() => insertBlock("reading-time")}
+                />
+                <BlockMenuItem
+                  icon={<Badge size={20} />}
+                  label="Badge"
+                  onClick={() => insertBlock("badge")}
+                />
+                <BlockMenuItem
+                  icon={
+                    <div className="w-5 h-5 border-2 border-indigo-500 rounded-full" />
+                  }
+                  label="Outline Badge"
+                  onClick={() => insertBlock("badge-outline")}
+                />
+                <BlockMenuItem
+                  icon={<Minus size={20} />}
+                  label="Thin Line"
+                  onClick={() => insertBlock("line-thin")}
+                />
+                <BlockMenuItem
+                  icon={<MoreHorizontal size={20} />}
+                  label="Dots"
+                  onClick={() => insertBlock("line-dots")}
+                />
+                <BlockMenuItem
+                  icon={<Sparkles size={20} />}
+                  label="Stars"
+                  onClick={() => insertBlock("line-ornament")}
+                />
+                <BlockMenuItem
+                  icon={<div className="text-gray-400">～～</div>}
+                  label="Wave"
+                  onClick={() => insertBlock("line-wave")}
+                />
+                <BlockMenuItem
+                  icon={<div className="w-6 h-1 bg-gray-800 rounded" />}
+                  label="Thick Line"
+                  onClick={() => insertBlock("line-thick")}
+                />
+                <BlockMenuItem
+                  icon={<div className="w-6 border-b border-gray-400" />}
+                  label="Full Line"
+                  onClick={() => insertBlock("line-full")}
+                />
+              </div>
+              {/* Callout Boxes Section */}
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="text-xs text-gray-400 uppercase tracking-wide mb-2 px-1">
+                  Callout Boxes
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    onClick={() => insertBlock("callout-yellow")}
+                    className="p-2 rounded border border-gray-100 hover:border-yellow-300 hover:bg-yellow-50 transition-all"
+                    title="Yellow Callout"
+                  >
+                    <div className="w-full h-6 rounded bg-yellow-100 border-l-4 border-yellow-500" />
+                  </button>
+                  <button
+                    onClick={() => insertBlock("callout-blue")}
+                    className="p-2 rounded border border-gray-100 hover:border-blue-300 hover:bg-blue-50 transition-all"
+                    title="Blue Callout"
+                  >
+                    <div className="w-full h-6 rounded bg-blue-100 border-l-4 border-blue-500" />
+                  </button>
+                  <button
+                    onClick={() => insertBlock("callout-green")}
+                    className="p-2 rounded border border-gray-100 hover:border-green-300 hover:bg-green-50 transition-all"
+                    title="Green Callout"
+                  >
+                    <div className="w-full h-6 rounded bg-green-100 border-l-4 border-green-500" />
+                  </button>
+                  <button
+                    onClick={() => insertBlock("callout-red")}
+                    className="p-2 rounded border border-gray-100 hover:border-red-300 hover:bg-red-50 transition-all"
+                    title="Red Callout"
+                  >
+                    <div className="w-full h-6 rounded bg-red-100 border-l-4 border-red-500" />
+                  </button>
+                  <button
+                    onClick={() => insertBlock("callout-purple")}
+                    className="p-2 rounded border border-gray-100 hover:border-purple-300 hover:bg-purple-50 transition-all"
+                    title="Purple Callout"
+                  >
+                    <div className="w-full h-6 rounded bg-purple-100 border-l-4 border-purple-500" />
+                  </button>
+                  <button
+                    onClick={() => insertBlock("callout-gray")}
+                    className="p-2 rounded border border-gray-100 hover:border-gray-300 hover:bg-gray-50 transition-all"
+                    title="Gray Callout"
+                  >
+                    <div className="w-full h-6 rounded bg-gray-100 border-l-4 border-gray-500" />
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )
+      }
 
       {/* Image Picker Modal */}
       <ImagePickerModal
@@ -3657,42 +3671,44 @@ export function Editor({
       />
 
       {/* Unsaved Changes Warning Modal */}
-      {showUnsavedChangesModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Unsaved Changes
-              </h3>
-              <p className="text-sm text-gray-600 mb-6">
-                You have unsaved changes. What would you like to do?
-              </p>
-              <div className="flex gap-3 justify-end">
-                <button
-                  onClick={handleDiscardAndGoBack}
-                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors text-sm font-medium"
-                >
-                  Discard Changes
-                </button>
-                <button
-                  onClick={handleSaveDraftAndGoBack}
-                  disabled={isSaving}
-                  className="px-4 py-2 bg-gray-900 text-white rounded hover:bg-black transition-colors text-sm font-medium disabled:opacity-50"
-                >
-                  {isSaving ? "Saving..." : "Save Draft & Go Back"}
-                </button>
-                <button
-                  onClick={() => setShowUnsavedChangesModal(false)}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm font-medium"
-                >
-                  Cancel
-                </button>
+      {
+        showUnsavedChangesModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Unsaved Changes
+                </h3>
+                <p className="text-sm text-gray-600 mb-6">
+                  You have unsaved changes. What would you like to do?
+                </p>
+                <div className="flex gap-3 justify-end">
+                  <button
+                    onClick={handleDiscardAndGoBack}
+                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors text-sm font-medium"
+                  >
+                    Discard Changes
+                  </button>
+                  <button
+                    onClick={handleSaveDraftAndGoBack}
+                    disabled={isSaving}
+                    className="px-4 py-2 bg-gray-900 text-white rounded hover:bg-black transition-colors text-sm font-medium disabled:opacity-50"
+                  >
+                    {isSaving ? "Saving..." : "Save Draft & Go Back"}
+                  </button>
+                  <button
+                    onClick={() => setShowUnsavedChangesModal(false)}
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors text-sm font-medium"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 }
 

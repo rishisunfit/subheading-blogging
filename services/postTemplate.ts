@@ -6,7 +6,8 @@
 
 export interface PostTemplateData {
   headerEnabled?: boolean; // Whether to show the template header
-  useGreenTemplate?: boolean; // Whether to use green template with white content card
+  useColoredTemplate?: boolean; // Whether to use colored template with white content card
+  templateColor?: string; // Custom color for the template background (hex color)
   seriesName?: string;
   volume?: string;
   title?: string;
@@ -55,6 +56,11 @@ export function getDefaultTemplateData(createdDate?: string): PostTemplateData {
     authorName: "Author Name",
     date: dateStr,
     alignment: "left",
+    // Default fonts - PT Serif for all elements
+    seriesFont: "PT Serif",
+    titleFont: "PT Serif",
+    subtitleFont: "PT Serif",
+    bylineFont: "PT Serif",
   };
 }
 
