@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Force mobile layout for ReactionBar inside mobile preview */
+/* Force mobile layout for ReactionBar inside mobile previews */
 /* Override Tailwind's sm: breakpoint when inside mobile preview */
 .mobile-preview .bg-gray-50.rounded-2xl > div[class*="flex"] {
   flex-direction: column !important;
