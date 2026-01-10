@@ -1004,7 +1004,7 @@ export function Dashboard({
                       <div className="flex gap-2 flex-shrink-0">
                         {/* Preview Button - use canonical URL for published posts with folder/slug, otherwise /posts/[id] */}
                         {(() => {
-                          // Published posts with canonical URL use canonical path
+                          // Published posts with canonical URL use custom domain
                           if (
                             post.status === "published" &&
                             post.folder_slug &&
@@ -1012,11 +1012,11 @@ export function Dashboard({
                           ) {
                             return (
                               <a
-                                href={`/${post.folder_slug}/${post.post_slug}`}
+                                href={`https://rishfits.bloggish.io/${post.folder_slug}/${post.post_slug}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                                title="Preview (Canonical URL)"
+                                title="View (Published)"
                               >
                                 <Eye size={20} />
                               </a>
