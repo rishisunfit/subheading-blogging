@@ -141,7 +141,7 @@ export function Preview({
   return (
     <div
       className="min-h-screen"
-      style={{ backgroundColor: templateData?.useGreenTemplate ? "#10B981" : "#FFFFFF" }}
+      style={{ backgroundColor: templateData?.useColoredTemplate ? (templateData?.templateColor || "#10B981") : "#FFFFFF" }}
     >
       {/* Navigation */}
       <div className="border-b border-gray-200 sticky top-0 bg-white z-10">
@@ -160,7 +160,7 @@ export function Preview({
       <article className="max-w-3xl mx-auto px-4 py-12">
         {/* Template Header - Display when using templateData */}
         {templateData && templateData.headerEnabled !== false && (
-          <header className={`mb-12 ${templateData.useGreenTemplate ? "text-white" : ""}`}>
+          <header className={`mb-12 ${templateData.useColoredTemplate ? "text-white" : ""}`}>
             {templateData.seriesName && templateData.volume && (
               <div className="text-center text-xs uppercase tracking-wider mb-4">
                 {templateData.seriesName} • {templateData.volume}
@@ -187,7 +187,7 @@ export function Preview({
         )}
 
         {/* Content - Wrapped in white card if green template is active */}
-        <div className={templateData?.useGreenTemplate ? "bg-white rounded-lg p-8 shadow-lg" : ""}>
+        <div className={templateData?.useColoredTemplate ? "bg-white rounded-lg p-8 shadow-lg" : ""}>
           {/* Content */}
           <div
             className="prose prose-lg max-w-none"
@@ -243,7 +243,7 @@ export function Preview({
         </div>
 
         {/* Footer */}
-        <footer className={`mt-16 pt-8 border-t ${templateData?.useGreenTemplate ? "border-white/20 text-white" : "border-gray-200"}`}>
+        <footer className={`mt-16 pt-8 border-t ${templateData?.useColoredTemplate ? "border-white/20 text-white" : "border-gray-200"}`}>
           <p className="text-center">
             Built with <span className="text-red-500">♥</span> using Blogish
           </p>
